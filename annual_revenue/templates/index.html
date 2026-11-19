@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Overview | Enterprise Revenue Estimator{% endblock %}
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">Annual revenue prediction</p>
+    <h1>Estimate enterprise revenue from company details.</h1>
+    <p class="intro">
+        This project uses a machine-learning model trained on {{ "{:,}".format(training_rows) }}
+        positive USD revenue records. Enter enterprise characteristics to get an estimate.
+    </p>
+    <a class="button" href="{{ url_for('predict') }}">Start a prediction</a>
+</section>
+
+<section class="info-grid" aria-label="Project details">
+    <article class="card">
+        <h2>What it uses</h2>
+        <p>Company type, jurisdiction, employee count, organization size, and standalone status.</p>
+    </article>
+    <article class="card">
+        <h2>Currency scope</h2>
+        <p>Training data is limited to positive revenue values reported in USD.</p>
+    </article>
+    <article class="card">
+        <h2>Important context</h2>
+        <p>The estimate is based on historical records and may not reflect an enterprise's actual results.</p>
+    </article>
+</section>
+{% endblock %}

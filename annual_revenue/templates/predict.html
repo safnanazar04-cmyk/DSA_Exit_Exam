@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Predict | Enterprise Revenue Estimator{% endblock %}
+{% block content %}
+<section class="form-panel">
+    <p class="eyebrow">Enterprise details</p>
+    <h1>Enter company information</h1>
+    <p class="muted">Revenue is estimated in USD. Numeric fields can be left blank if unknown.</p>
+
+    {% if errors %}
+    <div class="error-box" role="alert">
+        <strong>Please correct the following:</strong>
+        <ul>
+            {% for error in errors %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('predict') }}">
+        <label for="company_type">Company type</label>
+        <select id="company_type" name="company_type" required>
+            <option value="">Select a type</option>
+            {% for item in company_types %}
+            <option value="{{ item }}" {% if form_values.get('company_type') == item %}selected{% endif %}>
+                {{ item.replace('_', ' ').title() }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label for="enterprise_group_jurisdiction">Jurisdiction</label>
+        <select id="enterprise_group_jurisdiction" name="enterprise_group_jurisdiction" required>
+            <option value="">Select a jurisdiction</option>
+            {% for item in jurisdictions %}
+            <option value="{{ item }}" {% if form_values.get('enterprise_group_jurisdiction') == item %}selected{% endif %}>
+                {{ item }}
+            </option>
+            {% endfor %}
+            <option value="UNKNOWN" {% if form_values.get('enterprise_group_jurisdiction') == 'UNKNOWN' %}selected{% endif %}>
+                Other / unknown
+            </option>
+        </select>
+
+        <label for="employees">Number of employees</label>
+        <input id="employees" name="employees" type="number" min="0" step="any"
+               value="{{ form_values.get('employees', '') }}">
+
+        <label for="legal_units_count">Number of legal units</label>
+        <input id="legal_units_count" name="legal_units_count" type="number" min="0" step="1"
+               value="{{ form_values.get('legal_units_count', '') }}">
+
+        <label for="direct_subsidiaries_count">Number of direct subsidiaries</label>
+        <input id="direct_subsidiaries_count" name="direct_subsidiaries_count" type="number" min="0" step="1"
+               value="{{ form_values.get('direct_subsidiaries_count', '') }}">
+
+        <label for="max_hierarchy_depth">Maximum hierarchy depth</label>
+        <input id="max_hierarchy_depth" name="max_hierarchy_depth" type="number" min="0" step="1"
+               value="{{ form_values.get('max_hierarchy_depth', '') }}">
+
+        <label for="is_standalone_entity">Is this a standalone enterprise?</label>
+        <select id="is_standalone_entity" name="is_standalone_entity" required>
+            <option value="">Select an option</option>
+            <option value="Yes" {% if form_values.get('is_standalone_entity') == 'Yes' %}selected{% endif %}>Yes</option>
+            <option value="No" {% if form_values.get('is_standalone_entity') == 'No' %}selected{% endif %}>No</option>
+        </select>
+
+        <button class="button" type="submit">Estimate revenue</button>
+    </form>
+</section>
+{% endblock %}
